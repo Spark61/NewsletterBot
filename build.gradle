@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+}
+
+group 'de.azraanimating'
+version '1.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
+}
+
+dependencies {
+    implementation("net.dv8tion:JDA:4.3.0_278")
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+
+    manifest {
+        attributes["Implimentation-Title"] = project.name
+        attributes["Main-Class"] = "de.azraanimating.newsletterbot.main.Initializer"
+    }
+
+    exclude('META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
